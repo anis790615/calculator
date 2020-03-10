@@ -60,6 +60,139 @@
 
 
   <script>
+    // Assign each number to a variable
+    let oneBtn = document.getElementById("calc-one");
+    let twoBtn = document.getElementById("calc-two");
+    let threeBtn = document.getElementById("calc-three");
+    let fourBtn = document.getElementById("calc-four");
+    let fiveBtn = document.getElementById("calc-five");
+    let sixBtn = document.getElementById("calc-six");
+    let sevenBtn = document.getElementById("calc-seven");
+    let eightBtn = document.getElementById("calc-eight");
+    let nineBtn = document.getElementById("calc-nine");
+    let zeroBtn = document.getElementById("calc-zero");
+    // Assign functional buttons and operators to variables
+    let clearBtn = document.getElementById("calc-clear");
+    let backBtn = document.getElementById("calc-backspace");
+    let divBtn = document.getElementById("calc-division");
+    let multBtn = document.getElementById("calc-multiply");
+    let plusBtn = document.getElementById("calc-plus");
+    let minusBtn = document.getElementById("calc-minus");
+    let equalBtn = document.getElementById("calc-equals");
+    let decBtn = document.getElementById("calc-decimal");
+    // Assign the display and the display value to a variable
+    let disp = document.getElementById("calc-display-val");
+    let dispVal = "0";
+
+    // Create a variable for the pending value of the numbers (i.e the first number that we need to store when the display value is replaced by the second value. e.g. 3 + 5, we need to store the three when five is on the screen)
+    let pendVal;
+
+    // Creating an empty array that will store the operation so that it can be passed to an eval function
+    let opStringArray = [];
+
+    
+
+    // Assign all numerals to an array
+    let numBtns = document.querySelectorAll(".calc-btn-num");
+    // Assign all operators to an array
+    let opBtns = document.querySelectorAll(".calc-btn-operator");
+
+
+
+    // updateDisplay Function
+    let updateDisplay = (e) => {
+      let btnVal = e.target.innerText;
+      // Checking if the display value is zero, if it is, it will be cleared
+    if (dispVal==="0") {
+      dispVal = "";
+    }
+      // update the value of the display
+      dispVal += btnVal;
+      // Repace the innerText of the display with the updated display value
+      disp.innerText = dispVal;
+    }
+    // Perform Operation Function
+    let perfOperation = (e)=> {
+      let operator = e.target.innerText;
+     switch(operator) {
+       case ("+"):
+          pendVal = dispVal;
+          dispVal ="0";
+          disp.innerText = dispVal;
+          opStringArray.push(pendVal);
+          opStringArray.push("+");
+          break;
+
+       case("-"):
+          pendVal = dispVal;
+          dispVal ="0";
+          disp.innerText = dispVal;
+          opStringArray.push(pendVal);
+          opStringArray.push("-");
+          break;
+       case("x"):
+          pendVal = dispVal;
+          dispVal ="0";
+          disp.innerText = dispVal;
+          opStringArray.push(pendVal);
+          opStringArray.push("*");
+          break;
+       case("÷"):
+          pendVal = dispVal;
+          dispVal ="0";
+          disp.innerText = dispVal;
+          opStringArray.push(pendVal);
+          opStringArray.push("/");
+          break;
+       case("="):
+          opStringArray.push(dispVal);
+          let result = eval(opStringArray.join(" "));
+          dispVal = result;
+          disp.innerText = dispVal;
+          opStringArray= [];
+          break;
+        
+
+     }
+    }
+    
+
+
+
+    // Loop through the array to add listening for clicks and indicate the function to perform
+    for(let i=0; i<numBtns.length; i++) {
+      numBtns[i].addEventListener('click', updateDisplay, false);
+    };
+    for (let i=0; i<opBtns.length; i++) {
+      opBtns[i].addEventListener('click', perfOperation, false);
+    };
+
+
+    // clear Display Function
+    clearBtn.onclick = () => {
+      dispVal="0";
+      disp.innerText = dispVal;
+      pendVal=undefined;
+      opStringArray=[];
+    }
+    // Backspace Button
+    backBtn.onclick = () => {
+      let arrLength = dispVal.length;
+      dispVal = dispVal.slice(0, arrLength-1);
+      if (dispVal===""){
+        dispVal="0";
+      }
+      disp.innerText=dispVal;
+    }
+    // Making the decimal button, so that it doesn't add another decimal sign if one already exists on the screen
+    decBtn.onclick = ()=> {
+      if(!dispVal.includes('.')){
+        dispVal+='.';
+        disp.innerText=dispVal;
+      }
+    }
+
+
 
   </script>
 </body>
